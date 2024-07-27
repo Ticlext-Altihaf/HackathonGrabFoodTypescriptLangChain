@@ -8,6 +8,7 @@
 1. Clone the repository
 2. Run the following command in the terminal
 ```bash
+cd HackathonGrabFoodTypescriptLangChain/HackathonGrabFoodTypescriptLangChain
 nuget restore
 dotnet build
 dotnet run
