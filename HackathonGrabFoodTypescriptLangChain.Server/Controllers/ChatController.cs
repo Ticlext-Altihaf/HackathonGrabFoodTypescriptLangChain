@@ -26,9 +26,15 @@ public class ChatController : ControllerBase
 
     [HttpPost]
     [Route("{sessionId}")]
-    public async Task<ChatResponse> SendMessage(string sessionId, [FromBody] string message)
+    public async Task<IActionResult> SendMessage(string sessionId, [FromBody] string message)
     {
-        return await ChatService.SendMessage(sessionId, message);
+        try
+        {
+            return Ok(await ChatService.SendMessage(sessionId, message));
+        }catch (ArgumentException e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
     [HttpGet]
