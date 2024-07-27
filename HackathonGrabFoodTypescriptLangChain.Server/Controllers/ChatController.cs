@@ -20,28 +20,17 @@ public class ChatController : ControllerBase
     [Route("")]
     public async Task<IActionResult> CreateSession()
     {
-        try
-        {
-            return Ok(await ChatService.CreateSession());
-        }
-        catch (Exception e)
-        {
-            return BadRequest(new {message = e.Message});
-        }
+        var sessionId = await ChatService.CreateSession();
+        return Ok(new { Message = "Ok", Data = sessionId });
     }
 
     [HttpPost]
     [Route("{sessionId}")]
     public async Task<IActionResult> SendMessage(string sessionId, [FromBody] string message)
     {
-        try
-        {
-            return Ok(await ChatService.SendMessage(sessionId, message));
-        }
-        catch (ArgumentException e)
-        {
-            return BadRequest(new {message = e.Message});
-        }
+
+        var response = await ChatService.SendMessage(sessionId, message);
+        return Ok(new { Message = "Ok", Data = response });
     }
 
     [HttpGet]
@@ -55,6 +44,6 @@ public class ChatController : ControllerBase
             return NotFound();
         }
 
-        return Ok(result);
+        return Ok(new { Message = "Ok", Data = result });
     }
 }

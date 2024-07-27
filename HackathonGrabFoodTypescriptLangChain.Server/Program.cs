@@ -9,6 +9,7 @@ using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddEnvironmentVariables();
 builder.Services.Configure<Configuration>(builder.Configuration);
+builder.Services.AddSingleton<IChatSessionService, InMemoryChatSessionService>();
 builder.Services.AddSingleton<IChatService, StubChatService>();
 // Add services to the container.
 

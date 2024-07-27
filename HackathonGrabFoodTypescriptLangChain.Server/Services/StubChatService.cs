@@ -4,7 +4,7 @@ namespace HackathonGrabFoodTypescriptLangChain.Server.Services;
 
 public class StubChatService : IChatService
 {
-    protected readonly IChatSessionService _chatSessionService;
+    private readonly IChatSessionService _chatSessionService;
 
     public StubChatService(IChatSessionService chatSessionService)
     {
