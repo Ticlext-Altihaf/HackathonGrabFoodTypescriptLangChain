@@ -4,11 +4,16 @@ namespace HackathonGrabFoodTypescriptLangChain.Server.Services;
 
 public class StubChatService : IChatService
 {
-    private readonly Dictionary<string, ChatSession> _sessions = new Dictionary<string, ChatSession>();
+    protected readonly IChatSessionService _chatSessionService;
 
-    public Task<ChatResponse> SendMessage(string sessionId, string message)
+    public StubChatService(IChatSessionService chatSessionService)
     {
-        var session = _sessions.GetValueOrDefault(sessionId);
+        _chatSessionService = chatSessionService;
+    }
+
+    public async Task<ChatResponse> SendMessage(string sessionId, string message)
+    {
+        var session = await _chatSessionService.GetSession(sessionId);
         if (session == null)
         {
             throw new ArgumentException("Invalid session ID");
@@ -20,10 +25,11 @@ public class StubChatService : IChatService
             Message = "Hello, how can I help you?",
             Suggestions = new string[] {"Order food", "Track order", "Cancel order"}
         };
-        return Task.FromResult(response);
+        await _chatSessionService.SaveSession(sessionId, session);
+        return response;
     }
 
-    public Task<string> CreateSession()
+    public async Task<string> CreateSession()
     {
         var sessionId = Guid.NewGuid().ToString();
         var session = new ChatSession
@@ -31,11 +37,12 @@ public class StubChatService : IChatService
             History = new Dictionary<string, string>()
         };
 
-        return Task.FromResult(sessionId);
+        await _chatSessionService.SaveSession(sessionId, session);
+        return sessionId;
     }
 
-    public Task<ChatSession?> GetSession(string sessionId)
+    public async Task<ChatSession?> GetSession(string sessionId)
     {
-        return Task.FromResult(_sessions.GetValueOrDefault(sessionId, null));
+        return await _chatSessionService.GetSession(sessionId);
     }
 }
