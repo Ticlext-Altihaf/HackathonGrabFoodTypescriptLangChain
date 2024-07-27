@@ -3,7 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using HackathonGrabFoodTypescriptLangChain.Server.Models;
 
 namespace HackathonGrabFoodTypescriptLangChain.Server.Controllers;
-
+[ApiController]
+[Route("[controller]")]
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
