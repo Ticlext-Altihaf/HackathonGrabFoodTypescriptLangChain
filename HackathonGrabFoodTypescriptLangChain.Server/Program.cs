@@ -1,11 +1,12 @@
 using System.Reflection;
 using HackathonGrabFoodTypescriptLangChain.Server.Properties;
+using HackathonGrabFoodTypescriptLangChain.Server.Services;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddEnvironmentVariables();
 builder.Services.Configure<Configuration>(builder.Configuration);
-
+builder.Services.AddSingleton<IChatService, StubChatService>();
 // Add services to the container.
 
 builder.Services.AddControllers();

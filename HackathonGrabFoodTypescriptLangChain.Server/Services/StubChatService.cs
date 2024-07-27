@@ -36,6 +36,6 @@ public class StubChatService : IChatService
 
     public Task<ChatSession?> GetSession(string sessionId)
     {
-        return Task.FromResult(_sessions.GetValueOrDefault(sessionId));
+        return Task.FromResult(_sessions.GetValueOrDefault(sessionId, null));
     }
 }
