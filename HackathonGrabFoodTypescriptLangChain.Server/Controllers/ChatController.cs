@@ -1,4 +1,3 @@
-using HackathonGrabFoodTypescriptLangChain.Server.Models;
 using HackathonGrabFoodTypescriptLangChain.Server.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,8 +7,8 @@ namespace HackathonGrabFoodTypescriptLangChain.Server.Controllers;
 [Route("[controller]")]
 public class ChatController : ControllerBase
 {
-    protected readonly IChatService ChatService;
     private readonly ILogger<ChatController> _logger;
+    protected readonly IChatService ChatService;
 
     public ChatController(ILogger<ChatController> logger, IChatService chatService)
     {
@@ -19,9 +18,16 @@ public class ChatController : ControllerBase
 
     [HttpPost]
     [Route("")]
-    public async Task<string> CreateSession()
+    public async Task<IActionResult> CreateSession()
     {
-        return await ChatService.CreateSession();
+        try
+        {
+            return Ok(await ChatService.CreateSession());
+        }
+        catch (Exception e)
+        {
+            return BadRequest(new {message = e.Message});
+        }
     }
 
     [HttpPost]
@@ -31,9 +37,10 @@ public class ChatController : ControllerBase
         try
         {
             return Ok(await ChatService.SendMessage(sessionId, message));
-        }catch (ArgumentException e)
+        }
+        catch (ArgumentException e)
         {
-            return BadRequest(e.Message);
+            return BadRequest(new {message = e.Message});
         }
     }
 
@@ -46,8 +53,8 @@ public class ChatController : ControllerBase
         {
             // 404
             return NotFound();
-
         }
+
         return Ok(result);
     }
 }

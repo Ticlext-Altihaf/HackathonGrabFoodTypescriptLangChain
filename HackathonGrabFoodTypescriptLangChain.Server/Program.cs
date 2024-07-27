@@ -1,6 +1,9 @@
+using System.Net.Mime;
 using System.Reflection;
+using System.Text.Json;
 using HackathonGrabFoodTypescriptLangChain.Server.Properties;
 using HackathonGrabFoodTypescriptLangChain.Server.Services;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -37,6 +40,27 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+app.UseExceptionHandler(exceptionHandlerApp =>
+{
+    exceptionHandlerApp.Run(async context =>
+    {
+        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+
+        // using static System.Net.Mime.MediaTypeNames;
+        context.Response.ContentType = MediaTypeNames.Application.Json;
+
+
+        var exceptionHandlerPathFeature =
+            context.Features.Get<IExceptionHandlerFeature>();
+
+        if (exceptionHandlerPathFeature?.Error is ArgumentException)
+        {
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+            await context.Response.WriteAsync(JsonSerializer.Serialize(new
+                {message = exceptionHandlerPathFeature.Error.Message}));
+        }
+    });
+});
 
 app.UseAuthorization();
 
