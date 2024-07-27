@@ -1,3 +1,4 @@
+using HackathonGrabFoodTypescriptLangChain.Server.Models;
 using HackathonGrabFoodTypescriptLangChain.Server.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,9 +17,24 @@ public class ChatController : ControllerBase
         _chatService = chatService;
     }
 
-    [HttpPost("createSession")]
+    [HttpPost]
+    [Route("")]
     public async Task<string> CreateSession()
     {
         return await _chatService.CreateSession();
+    }
+
+    [HttpPost]
+    [Route("{sessionId}")]
+    public async Task<ChatResponse> SendMessage(string sessionId, [FromBody] string message)
+    {
+        return await _chatService.SendMessage(sessionId, message);
+    }
+
+    [HttpGet]
+    [Route("{sessionId}")]
+    public async Task<ChatSession?> GetMessages(string sessionId)
+    {
+        return await _chatService.GetSession(sessionId);
     }
 }
