@@ -1,0 +1,6 @@
+﻿services:
+  hackathongrabfoodtypescriptlangchain.server:
+    image: hackathongrabfoodtypescriptlangchain.server
+    build:
+      context: .
+      dockerfile: HackathonGrabFoodTypescriptLangChain.Server/Dockerfile
