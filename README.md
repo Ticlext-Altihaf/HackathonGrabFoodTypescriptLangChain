@@ -9,7 +9,7 @@
 2. Run the following command in the terminal
 ```bash
 cd HackathonGrabFoodTypescriptLangChain/HackathonGrabFoodTypescriptLangChain.Server
-dotnet nuget restore
+dotnet restore
 dotnet run
 ```
 
