@@ -1,7 +1,10 @@
 using System.Reflection;
+using HackathonGrabFoodTypescriptLangChain.Server.Properties;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddEnvironmentVariables();
+builder.Services.Configure<Configuration>(builder.Configuration);
 
 // Add services to the container.
 
