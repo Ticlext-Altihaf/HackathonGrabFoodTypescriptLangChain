@@ -5,22 +5,20 @@ namespace HackathonGrabFoodTypescriptLangChain.Server.Services;
 public class StubChatService : IChatService
 {
     private readonly Dictionary<string, ChatSession> _sessions = new Dictionary<string, ChatSession>();
+
     public Task<ChatResponse> SendMessage(string sessionId, string message)
     {
         var session = _sessions.GetValueOrDefault(sessionId);
         if (session == null)
         {
-            return Task.FromResult(new ChatResponse
-            {
-                Message = "Session not found"
-            });
+            throw new ArgumentException("Invalid session ID");
         }
 
         session.History.Add("user", message);
         var response = new ChatResponse
         {
             Message = "Hello, how can I help you?",
-            Suggestions = new string[] { "Order food", "Track order", "Cancel order" }
+            Suggestions = new string[] {"Order food", "Track order", "Cancel order"}
         };
         return Task.FromResult(response);
     }
